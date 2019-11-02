@@ -38,7 +38,9 @@ HTTP_BASIC_PASS=
 
 ## Endpoints
 
-**POST /new params: { name }, returns: { name, id }**
+**POST / params: { name }, returns: { name, id }**
+
+Create new keypair
 
 **GET /:id returns: { id, name }**
 

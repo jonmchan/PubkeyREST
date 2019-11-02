@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
+gem 'openssl'
+gem 'rack-contrib',    require: false
 gem 'sinatra'
 gem 'sinatra-contrib'
-gem 'sinatra-basic-auth'
 gem 'sqlite3'
 gem 'puma'
