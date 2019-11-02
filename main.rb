@@ -79,10 +79,8 @@ def process_payload(operation, id, payload)
   response = payload.map do |element|
     case operation
     when "sign"
-      puts element
       Base64.encode64(key.sign(digest,element))
     when "verify"
-      puts element['document']
       halt(422, json(error:"verify must pass in signature and document in hash")) unless element.is_a? Hash
       halt(422, json(error:"verify must pass in signature and document in hash")) if element['signature'].nil?
       halt(422, json(error:"verify must pass in signature and document in hash")) if element['document'].nil?

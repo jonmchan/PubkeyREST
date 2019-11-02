@@ -14,6 +14,12 @@ Run the following to get started:
 
 ```
 bundle 
+
+# Set your variables
+export HTTP_BASIC_USER=user
+export HTTP_BASIC_PASS=pass
+export PRIVATE_KEY_PASSPHRASE=SomeSillyPassphraseToProtectThePrivateKeys
+
 bundle exec ruby main.rb -s Puma
 ```
 
@@ -27,7 +33,7 @@ If all goes well, you should be able to navigate a browser to http://localhost:4
 PRIVATE_KEY_ACCESSIBLE=false
 SQLITE_FILE_LOCATION=
 # if unset, the private keys will be stored with no encryption in the SQLiteDB
-## WARNING - do NOT change this or lose this 
+## WARNING - after creating keys, do NOT change this or lose this 
 ## passphrase or all your keys will be INACCESSIBLE!
 PRIVATE_KEY_PASSPHRASE=
 
@@ -38,22 +44,93 @@ HTTP_BASIC_PASS=
 
 ## Endpoints
 
-**POST / params: { name }, returns: { name, id }**
+### POST / params: { name }, returns: { name, id } 
 
-Create new keypair
+Creates a new keypair
 
-**GET /:id returns: { id, name }**
+```
+curl --user "user:pass" -d '{"name":"test"}' -H "Content-Type: application/json" http://localhost:4567/
+```
 
-**GET /:id/public_key**
+### GET /:id returns: { id, name }
 
-**GET /:id/private_key** (disabled unless PRIVATE_KEY_ACCESSIBLE=true environment variable is set)
+Retrieves the id and name of the keypair.
 
-**POST /:id/sign { payload }**
+```
+curl --user "user:pass" http://localhost:4567/1
+```
 
-**POST /:id/verify { payload }**
+### GET /:id/public_key
 
-**POST /:id/encrypt { payload }**
+Retrieves the public key of the keypair.
 
-**POST /:id/decrypt { payload }**
+```
+curl --user "user:pass" http://localhost:4567/1/public_key
+```
+
+### GET /:id/private_key - (disabled unless PRIVATE_KEY_ACCESSIBLE=true environment variable is set)
+
+Retrieves the private key of the keypair
+
+```
+curl --user "user:pass" http://localhost:4567/1/private_key
+```
+
+### POST /:id/sign { payload } 
+
+Signs the passed in payload. 
+
+Payload as String:
+```
+curl -v --user "user:pass" -d '{"payload":"Hello"}' -H "Content-Type: application/json" -X POST  http://localhost:4567/1/sign
+```
+
+Payload as Array:
+```
+curl -v --user "user:pass" -d '{"payload":["Hello", "this","test","works"]}' -H "Content-Type: application/json" -X POST  http://localhost:4567/1/sign
+```
+
+### POST /:id/verify { payload }
+
+Verifies a signature and a given document. Must pass in payload as a hash with a signature and document element.
+
+Single Payload:
+```
+curl -v --user "user:pass" -d '{"payload": {"signature":"..signature_hash..","document":"Hello"}}' -H "Content-Type: application/json" -X POST  http://localhost:4567/1/verify
+```
+
+Multiple Payloads:
+```
+curl -v --user "user:pass" -d '{"payload": [{"signature":"..signature_hash..","document":"Hello"},{"signature":"..signature_hash..","document":"this"},{"signature":"..signature_hash..","document":"test"}]}' -H "Content-Type: application/json" -X POST  http://localhost:4567/1/verify
+```
+
+### POST /:id/encrypt { payload }
+
+Encrypts the passed in payload. 
+
+Payload as String:
+```
+curl -v --user "user:pass" -d '{"payload":"Hello"}' -H "Content-Type: application/json" -X POST  http://localhost:4567/1/encrypt
+```
+
+Payload as Array:
+```
+curl -v --user "user:pass" -d '{"payload":["Hello", "this","test","works"]}' -H "Content-Type: application/json" -X POST  http://localhost:4567/1/encrypt
+```
+
+
+### POST /:id/decrypt { payload }
+
+Decrypts the passed in payload.
+
+Payload as String:
+```
+curl -v --user "user:pass" -d '{"payload":"encryptedstring"}' -H "Content-Type: application/json" -X POST  http://localhost:4567/1/decrypt
+```
+
+Payload as Array:
+```
+curl -v --user "user:pass" -d '{"payload":["encryptedstring1", "encryptedstring2","encryptedstring3","encryptedstring4"]}' -H "Content-Type: application/json" -X POST  http://localhost:4567/1/decrypt
+```
 
 Payload can be either a string to validate a single payload or an array of strings. For array, each string element  will be acted upon independently and the return value will be in a corresponding array.
