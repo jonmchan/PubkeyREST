@@ -9,9 +9,14 @@ require 'rack/contrib'
 require 'sinatra/reloader' if development?
 
 
-use Rack::Auth::Basic, "Restricted Area" do |username, password|
-  (username == ENV['HTTP_BASIC_USER'] || ENV['HTTP_BASIC_USER'].nil?) && 
-  (password == ENV['HTTP_BASIC_PASS'] || ENV['HTTP_BASIC_PASS'].nil?)
+
+# we need to wrap this whole thing if both fields are not in env, don't want
+# to both asking for security at all
+if ENV['HTTP_BASIC_USER'] || ENV['HTTP_BASIC_PASS']
+  use Rack::Auth::Basic, "Restricted Area" do |username, password|
+    (username == ENV['HTTP_BASIC_USER'] || ENV['HTTP_BASIC_USER'].nil?) && 
+    (password == ENV['HTTP_BASIC_PASS'] || ENV['HTTP_BASIC_PASS'].nil?)
+  end
 end
 
 $db = SQLite3::Database.new(ENV['SQLITE_FILE_LOCATION'] || "keypairs.db")

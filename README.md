@@ -42,6 +42,35 @@ HTTP_BASIC_USER=
 HTTP_BASIC_PASS=
 ```
 
+## Docker
+
+You can also utilize docker to run this microservice:
+
+```bash
+docker build -t pubkeyrest:1.0 .
+docker run -d --name pubkeyrest -p 4567:4567 pubkeyrest:1.0
+```
+
+docker-compose.yml:
+```yml
+version: '3.3'
+  
+services:
+  pubkeyrest:
+    container_name: rgcbc-auditms
+    build: https://github.com/jonmchan/PubkeyREST.git
+    environment:
+      HTTP_BASIC_USER: someuser
+      HTTP_BASIC_PASS: somepass
+      PRIVATE_KEY_PASSPHRASE: SomethingReallySecureAndSomewhatLong
+    volumes:
+      - pubkeydata:/data
+    ports:
+      - "4567:4567"
+volumes:
+    pubkeydata: {}
+```
+
 ## Endpoints
 
 ### POST / params: { name }, returns: { name, id } 
