@@ -1,6 +1,6 @@
 # PubkeyREST - Pubkey RESTful Microservice
 
-![pubkey restful microservice](https://www.puppyfaqs.com/wp-content/uploads/2018/09/how-much-do-puppies-sleep-at-8-weeks-1020x520.jpg)
+![pubkey restful microservice](https://user-images.githubusercontent.com/1827190/68080007-243cf180-fdc1-11e9-9394-be1c83a98830.png)
 
 Very simple REST microservice exposing basic OpenSSL Public/Private key encryption methods. Generates and stores its own pub/private keys in a sqlite DB.
 
