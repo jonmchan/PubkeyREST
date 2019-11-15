@@ -135,6 +135,13 @@ get '/:id/public_key' do
   record['public_key']
 end
 
+get '/:id/checksum' do
+  content_type 'text/plain'
+  record = find_keypair(params[:id])
+  sha256 = OpenSSL::Digest::SHA256.new
+  Base64.encode64(sha256.digest(record['private_key']))
+end
+
 if ENV['PRIVATE_KEY_ACCESSIBLE'] == 'true'
   get '/:id/private_key' do
     record = find_keypair(params[:id])
