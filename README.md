@@ -97,6 +97,14 @@ Retrieves the public key of the keypair.
 curl --user "user:pass" http://localhost:4567/1/public_key
 ```
 
+### GET /:id/checksum
+
+Returns the SHA256 checksum of the private key for validating key integrity.
+
+```
+curl --user "user:pass" http://localhost:4567/1/checksum
+```
+
 ### GET /:id/private_key - (disabled unless PRIVATE_KEY_ACCESSIBLE=true environment variable is set)
 
 Retrieves the private key of the keypair
