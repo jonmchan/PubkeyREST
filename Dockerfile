@@ -16,4 +16,4 @@ EXPOSE 4567
 
 ENV SQLITE_FILE_LOCATION /data/keypairs.db
 
-CMD bundle exec ruby main.rb -s Puma -o 0.0.0.0
+ENTRYPOINT bundle exec ruby main.rb -s Puma -o 0.0.0.0
