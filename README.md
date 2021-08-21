@@ -57,7 +57,7 @@ version: '3.3'
   
 services:
   pubkeyrest:
-    container_name: rgcbc-auditms
+    container_name: pubkeyrest
     build: https://github.com/jonmchan/PubkeyREST.git
     environment:
       HTTP_BASIC_USER: someuser
